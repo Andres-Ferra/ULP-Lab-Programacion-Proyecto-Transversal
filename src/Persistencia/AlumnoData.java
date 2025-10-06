@@ -77,7 +77,7 @@ public class AlumnoData {
         }
     }
 
-    public Alumno buscarAlumnoPorId(int id) {
+    /*public Alumno buscarAlumnoPorId(int id) {
         String sql = "SELECT dni, apellido, nombre_alumno, fechaNacimiento FROM alumno "
                 + "WHERE id_alumno = ? AND estado_alumno = 1";
         Alumno alumno = null;
@@ -108,6 +108,42 @@ public class AlumnoData {
         Alumno alumno = null;
         try (PreparedStatement ps = conect.prepareStatement(sql)){
             ps.setInt(1, dni);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                alumno = new Alumno();
+                alumno.setId_alumno(rs.getInt("id_alumno"));
+                alumno.setDni(rs.getInt("dni"));
+                alumno.setApellido(rs.getString("apellido"));
+                alumno.setNombre_alumno(rs.getString("nombre_alumno"));
+                alumno.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
+                alumno.setEstado_alumno(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe el alumno buscado");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la Tabla alumno: " + ex.getMessage());
+        }   
+        return alumno;
+    }*/
+    
+    public Alumno buscarAlumnoPorId(int id) {
+        return buscarAlumno("id_alumno", id, "ID");
+    }
+
+    public Alumno buscarAlumnoPorDni(int dni) {
+        return buscarAlumno("dni", dni, "DNI");
+    }
+    
+    public Alumno buscarAlumno(String campo, int valor, String tipoMensaje) {
+        /*era DNI */
+        String sql = "SELECT id_alumno, dni, apellido, nombre_alumno, " + 
+                "fechaNacimiento FROM alumno WHERE " + campo + 
+                "= ? AND estado_alumno = 1";
+        Alumno alumno = null;
+        
+        try (PreparedStatement ps = conect.prepareStatement(sql)){
+            ps.setInt(1, valor);
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
