@@ -3,19 +3,28 @@ package Vistas;
 import Modelo.Alumno;
 import Modelo.Conexion;
 import Persistencia.AlumnoData;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
 
 public class TestAlumno {
 
     public static void main(String[] args) {
-        System.out.println("  SISTEMA DE GESTIÓN UNIVERSIDAD DE LA PUNTA ");
-        System.out.println("PROBANDO CONEXIÓN A LA BASE DE DATOS");
+        System.out.println("  SISTEMA DE GESTIÓN UNIVERSIDAD DE LA PUNTA\n");
+        System.out.println("Test conexión a la base de datos:");
       
-        Conexion.getConexion();
+        Connection conexion = Conexion.getConexion();
+        
+        if(conexion != null)
+            System.out.println("\tConexión Exitosa...\n");
+        else {
+            System.out.println("\tError de Conexión...\n");
+            return;
+        }
+        
         AlumnoData alumnoData = new AlumnoData();
         
-        System.out.println(" INGRESANDO INTEGRANTES DEL GRUPO");
+        System.out.println("Test Alumno Data\n\n* Buscar por DNI");
 
         Alumno camila = alumnoData.buscarAlumnoPorDni(43621472);
         if (camila == null) {
